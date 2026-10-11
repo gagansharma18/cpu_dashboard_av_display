@@ -71,8 +71,19 @@ export class DisplayRenderer {
     this.smoothed.ram_t = this.target.ram_t;
     this.smoothed.time = this.target.time;
 
+    // Cleanly formatted snapshot for renderers to prevent floating-point decimal leaks
+    const formattedData = {
+      ...this.smoothed,
+      cpu: Math.round(this.smoothed.cpu),
+      gpu: Math.round(this.smoothed.gpu),
+      ram: Math.round(this.smoothed.ram),
+      vram: Math.round(this.smoothed.vram),
+      cpu_t: Number(this.smoothed.cpu_t.toFixed(1)),
+      gpu_t: Number(this.smoothed.gpu_t.toFixed(1))
+    };
+
     // Render active theme to canvas
-    this.themeManager.render(this.ctx, this.width, this.height, this.smoothed);
+    this.themeManager.render(this.ctx, this.width, this.height, formattedData);
 
     // Transmit telemetry to ESP32 USB hardware
     const now = Date.now();

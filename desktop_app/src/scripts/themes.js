@@ -157,7 +157,7 @@ export class ThemeManager {
     // Bottom Ambient Status Bar
     ctx.font = '500 9px "JetBrains Mono", monospace';
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText(`PUMP: 2450 RPM  |  RAM: ${data.ram}%  |  ${data.time}`, 160, 222);
+    ctx.fillText(`PUMP: 2450 RPM  |  RAM: ${Math.round(data.ram)}%  |  ${data.time}`, 160, 222);
     ctx.textAlign = 'left';
   }
 
@@ -215,8 +215,8 @@ export class ThemeManager {
     }
 
     // Floating Neon HUD Cards
-    this.drawGlassCard(ctx, 16, 20, 100, 72, 'CPU CORE', `${data.cpu}%`, `${data.cpu_t}°C`, '#00f0ff');
-    this.drawGlassCard(ctx, 204, 20, 100, 72, 'GPU ENGINE', `${data.gpu}%`, `${data.gpu_t}°C`, '#f43f5e');
+    this.drawGlassCard(ctx, 16, 20, 100, 72, 'CPU CORE', `${Math.round(data.cpu)}%`, `${Math.round(data.cpu_t)}°C`, '#00f0ff');
+    this.drawGlassCard(ctx, 204, 20, 100, 72, 'GPU ENGINE', `${Math.round(data.gpu)}%`, `${Math.round(data.gpu_t)}°C`, '#f43f5e');
 
     // Bottom Cyber Pill
     ctx.fillStyle = 'rgba(12, 5, 26, 0.85)';
@@ -226,7 +226,7 @@ export class ThemeManager {
     ctx.font = '600 10px "JetBrains Mono", monospace';
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
-    ctx.fillText(`RAM: ${data.ram}%  //  NET: ${data.net_d} MB/s`, 160, 224);
+    ctx.fillText(`RAM: ${Math.round(data.ram)}%  //  NET: ${data.net_d} MB/s`, 160, 224);
     ctx.textAlign = 'left';
   }
 
@@ -298,12 +298,12 @@ export class ThemeManager {
     ctx.font = '600 10px "Outfit", sans-serif';
     ctx.fillStyle = '#94a3b8';
     ctx.textAlign = 'left';
-    ctx.fillText(`CPU: ${data.cpu_t}°C`, 14, 24);
-    ctx.fillText(`RAM: ${data.ram}%`, 14, 40);
+    ctx.fillText(`CPU: ${Math.round(data.cpu_t)}°C`, 14, 24);
+    ctx.fillText(`RAM: ${Math.round(data.ram)}%`, 14, 40);
 
     ctx.textAlign = 'right';
-    ctx.fillText(`GPU: ${data.gpu}% (${data.gpu_t}°C)`, width - 14, 24);
-    ctx.fillText(`VRAM: ${data.vram}%`, width - 14, 40);
+    ctx.fillText(`GPU: ${Math.round(data.gpu)}% (${Math.round(data.gpu_t)}°C)`, width - 14, 24);
+    ctx.fillText(`VRAM: ${Math.round(data.vram)}%`, width - 14, 40);
 
     ctx.textAlign = 'center';
     ctx.fillStyle = this.accentColor;
@@ -344,7 +344,7 @@ export class ThemeManager {
     ctx.fillText(`${Math.round(data.cpu)}%`, 30, 194);
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText(`${data.cpu_t}°C`, 30, 210);
+    ctx.fillText(`${Number(data.cpu_t).toFixed(1)}°C`, 30, 210);
 
     // GPU Stat
     ctx.font = '600 11px "Outfit", sans-serif';
@@ -355,7 +355,7 @@ export class ThemeManager {
     ctx.fillText(`${Math.round(data.gpu)}%`, 130, 194);
     ctx.font = '10px "JetBrains Mono", monospace';
     ctx.fillStyle = '#94a3b8';
-    ctx.fillText(`${data.gpu_t}°C`, 130, 210);
+    ctx.fillText(`${Number(data.gpu_t).toFixed(1)}°C`, 130, 210);
 
     // RAM & Clock
     ctx.font = '600 11px "Outfit", sans-serif';
