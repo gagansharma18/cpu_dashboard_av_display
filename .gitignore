@@ -1,0 +1,21 @@
+# PlatformIO
+.pio
+.pioenvs
+.piolibdeps
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
