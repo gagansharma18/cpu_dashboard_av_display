@@ -14,9 +14,6 @@ from tkinter import ttk
 # Screen dimensions
 NATIVE_W = 320
 NATIVE_H = 240
-SCALE = 2.5  # 800 x 600 display window
-WIN_W = int(NATIVE_W * SCALE)
-WIN_H = int(NATIVE_H * SCALE)
 
 # Cyberpunk Palette
 COLOR_BG          = "#050811"  # Deep obsidian void
@@ -33,9 +30,20 @@ COLOR_WARN_TEXT   = "#ff4070"
 class CyberHudSimulator:
     def __init__(self, root):
         self.root = root
-        self.root.title("ESP32 Cyberpunk AV Dashboard - Desktop Preview")
+        self.root.title("ESP32 Cyberpunk AV Dashboard - 480p & 240p Simulator")
         self.root.configure(bg="#020408")
         self.root.resizable(False, False)
+
+        # Resolution profiles (Default: 480p)
+        self.res_list = [
+            ("640x480 (480p 4:3)", 640, 480),
+            ("800x480 (480p WVGA 5:3)", 800, 480),
+            ("720x480 (480p NTSC D1 3:2)", 720, 480),
+            ("320x240 (240p QVGA)", 320, 240)
+        ]
+        self.res_idx = 0
+        self.win_w = self.res_list[self.res_idx][1]
+        self.win_h = self.res_list[self.res_idx][2]
 
         # Simulation state
         self.auto_sim = True
@@ -71,17 +79,17 @@ class CyberHudSimulator:
         self.update_loop()
 
     def sx(self, x):
-        return x * SCALE
+        return x * (self.win_w / 320.0)
 
     def sy(self, y):
-        return y * SCALE
+        return y * (self.win_h / 240.0)
 
     def create_widgets(self):
         main_frame = tk.Frame(self.root, bg="#020408")
         main_frame.pack(padx=12, pady=12)
 
-        # Canvas replicating the 320x240 LCD
-        self.canvas = tk.Canvas(main_frame, width=WIN_W, height=WIN_H, bg=COLOR_BG, highlightthickness=1, highlightbackground="#00f0ff")
+        # Canvas replicating the LCD
+        self.canvas = tk.Canvas(main_frame, width=self.win_w, height=self.win_h, bg=COLOR_BG, highlightthickness=1, highlightbackground="#00f0ff")
         self.canvas.pack()
 
         # Controls panel
@@ -89,10 +97,16 @@ class CyberHudSimulator:
         ctrl_frame.pack(fill=tk.X, pady=(10, 0))
 
         # Auto simulation toggle
-        self.btn_mode = tk.Button(ctrl_frame, text="Mode: AUTO SIMULATION (Playing)", 
-                                  bg="#00c3ff", fg="#000000", font=("Helvetica", 10, "bold"),
+        self.btn_mode = tk.Button(ctrl_frame, text="Mode: AUTO (Playing)", 
+                                  bg="#00c3ff", fg="#000000", font=("Helvetica", 9, "bold"),
                                   activebackground="#64d8ff", command=self.toggle_mode, relief=tk.FLAT)
-        self.btn_mode.pack(side=tk.LEFT, padx=5)
+        self.btn_mode.pack(side=tk.LEFT, padx=3)
+
+        # Resolution toggle
+        self.btn_res = tk.Button(ctrl_frame, text=f"Res: {self.res_list[self.res_idx][0]}", 
+                                 bg="#1e293b", fg="#64d8ff", font=("Helvetica", 9, "bold"),
+                                 activebackground="#334155", command=self.cycle_resolution, relief=tk.FLAT)
+        self.btn_res.pack(side=tk.LEFT, padx=3)
 
         # Sliders container
         self.slider_frame = tk.Frame(ctrl_frame, bg="#0a101d")
@@ -119,6 +133,14 @@ class CyberHudSimulator:
                                       bg="#ff0055", fg="#ffffff", font=("Helvetica", 9, "bold"),
                                       activebackground="#ff4070", command=self.trigger_overheat, relief=tk.FLAT)
         self.btn_overheat.pack(side=tk.LEFT, padx=(15, 0))
+
+    def cycle_resolution(self):
+        self.res_idx = (self.res_idx + 1) % len(self.res_list)
+        name, w, h = self.res_list[self.res_idx]
+        self.win_w = w
+        self.win_h = h
+        self.canvas.config(width=w, height=h)
+        self.btn_res.config(text=f"Res: {name}")
 
     def toggle_mode(self):
         self.auto_sim = not self.auto_sim

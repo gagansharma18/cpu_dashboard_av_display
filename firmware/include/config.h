@@ -13,9 +13,28 @@
 // DAC Output Pin (Must be GPIO 25 for DAC1)
 #define CVBS_DAC_PIN 25
 
-// Screen Canvas Dimensions
-#define SCREEN_WIDTH  320
-#define SCREEN_HEIGHT 240
+// ==============================================================================
+// HARDWARE RESOLUTION PROFILES (Supports 480p and 240p Displays)
+// ==============================================================================
+// Profile 1: 320x240 (240p QVGA - Recommended default, lowest SRAM, 60 FPS)
+// Profile 2: 640x480 (480p Standard VGA / 480i NTSC)
+// Profile 3: 720x480 (480p NTSC D1 Broadcast AV)
+// Profile 4: 480x272 (4.3" TFT LCD Widescreen)
+#define RESOLUTION_PROFILE 1
+
+#if RESOLUTION_PROFILE == 2
+  #define SCREEN_WIDTH  640
+  #define SCREEN_HEIGHT 480
+#elif RESOLUTION_PROFILE == 3
+  #define SCREEN_WIDTH  720
+  #define SCREEN_HEIGHT 480
+#elif RESOLUTION_PROFILE == 4
+  #define SCREEN_WIDTH  480
+  #define SCREEN_HEIGHT 272
+#else
+  #define SCREEN_WIDTH  320
+  #define SCREEN_HEIGHT 240
+#endif
 
 // Serial Baud Rate
 #define SERIAL_BAUD_RATE 115200

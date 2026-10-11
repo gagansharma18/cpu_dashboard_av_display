@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +15,12 @@ try {
   si = await import('systeminformation');
 } catch (err) {
   console.warn('systeminformation failed to load:', err);
+}
+
+function getAppEntry() {
+  const distPath = path.join(__dirname, '../dist/index.html');
+  const indexPath = path.join(__dirname, '../index.html');
+  return fs.existsSync(distPath) ? distPath : indexPath;
 }
 
 function createWindow() {
@@ -32,11 +39,18 @@ function createWindow() {
     }
   });
 
-  // Load Vite dev server if running, or local index.html
   const devServerUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173';
-  mainWindow.loadURL(devServerUrl).catch(() => {
-    mainWindow.loadFile(path.join(__dirname, '../index.html'));
-  });
+  const fallbackFile = getAppEntry();
+
+  // Test if dev server is running before attempting to load URL
+  fetch(devServerUrl, { method: 'HEAD' })
+    .then(() => {
+      mainWindow.loadURL(devServerUrl);
+    })
+    .catch(() => {
+      // Quietly load local built distribution bundle
+      mainWindow.loadFile(fallbackFile);
+    });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
@@ -72,7 +86,16 @@ function createPopoutWindow() {
     }
   });
 
-  popoutWindow.loadFile(path.join(__dirname, '../index.html'), { query: { mode: 'popout' } });
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173';
+  const fallbackFile = getAppEntry();
+
+  fetch(devServerUrl, { method: 'HEAD' })
+    .then(() => {
+      popoutWindow.loadURL(`${devServerUrl}?mode=popout`);
+    })
+    .catch(() => {
+      popoutWindow.loadFile(fallbackFile, { query: { mode: 'popout' } });
+    });
 
   popoutWindow.on('closed', () => {
     popoutWindow = null;

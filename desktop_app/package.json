@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "electron electron/main.js",
     "electron": "electron electron/main.js",
     "app": "vite --host & sleep 1 && electron electron/main.js"
   },

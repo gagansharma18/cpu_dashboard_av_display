@@ -115,7 +115,7 @@
               <!-- Top Hardware LED -->
               <div class="hardware-led">
                 <div class="led-dot"></div>
-                <span>4.3" CVBS DISP</span>
+                <span>480p CVBS DISP</span>
               </div>
 
               <!-- Recessed LCD Housing -->
@@ -128,8 +128,35 @@
 
             <!-- Stage Control Toolbar -->
             <div class="stage-controls">
-              <span class="control-pill active">320 x 240 NTSC</span>
-              <span class="control-pill">60 FPS DMA</span>
+              <!-- Resolution Selector -->
+              <div class="stage-control-item">
+                <span class="control-label">RESOLUTION:</span>
+                <select id="select-resolution" class="control-select" title="Display Resolution Profile">
+                  <optgroup label="480p High-Definition (Recommended)">
+                    <option value="640x480" selected>640 × 480 (480p Standard 4:3)</option>
+                    <option value="720x480">720 × 480 (480p NTSC D1 3:2)</option>
+                    <option value="800x480">800 × 480 (480p WVGA 5:3 Widescreen)</option>
+                    <option value="854x480">854 × 480 (480p FWVGA 16:9 Widescreen)</option>
+                  </optgroup>
+                  <optgroup label="Compact & Low-Bandwidth">
+                    <option value="480x320">480 × 320 (3.5" IPS Turing 3:2)</option>
+                    <option value="480x272">480 × 272 (4.3" TFT LCD 16:9)</option>
+                    <option value="320x240">320 × 240 (240p QVGA Classic)</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <!-- Scaling / Fit Mode -->
+              <div class="stage-control-item">
+                <span class="control-label">SCALING:</span>
+                <select id="select-scaling" class="control-select" title="Raster Scaling Mode">
+                  <option value="stretch" selected>Fill / Stretch (Full Bleed)</option>
+                  <option value="fit">Aspect Fit (1:1 Proportional)</option>
+                </select>
+              </div>
+
+              <span class="control-pill" id="fps-pill">60 FPS DMA</span>
+
               <label class="control-pill" style="cursor: pointer;">
                 <input type="checkbox" id="toggle-scanlines" checked style="margin-right: 4px;">
                 CRT Scanlines
@@ -143,7 +170,7 @@
             <div class="studio-section">
               <div class="section-title">
                 <span>Display Themes</span>
-                <span style="font-size: 10px; color: var(--theme-color);">5 PRESETS</span>
+                <span style="font-size: 10px; color: var(--theme-color);">16 PRESETS</span>
               </div>
 
               <div class="theme-grid">
@@ -181,12 +208,112 @@
                   <span>Arc Reactor</span>
                 </div>
 
-                <!-- Theme 5: Custom Wallpaper / GIF -->
-                <div class="theme-card" data-theme="custom_wallpaper" id="theme-custom" style="grid-column: span 2;">
-                  <div class="theme-preview-box" style="background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 11px; color: #94a3b8;">🖼️ Custom Media Overlay</span>
+                <!-- Theme 5: Automotive Supercar -->
+                <div class="theme-card" data-theme="automotive_supercar" id="theme-automotive">
+                  <div class="theme-preview-box" style="background: radial-gradient(circle, #1a2234 0%, #080c14 100%);">
+                    <div style="position: absolute; top: 12px; left: 16px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #ef4444;"></div>
+                    <div style="position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #3b82f6;"></div>
+                    <div style="position: absolute; top: 24px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: 800; color: #ffb700;">[S 7]</div>
                   </div>
-                  <span>Custom Wallpaper / GIF</span>
+                  <span>Supercar Tach</span>
+                </div>
+
+                <!-- Theme 6: Mecha Gaming ROG -->
+                <div class="theme-card" data-theme="mecha_gaming_rog" id="theme-mecha">
+                  <div class="theme-preview-box" style="background: linear-gradient(135deg, #170d19, #090a10); border-color: #ff003b;">
+                    <div style="position: absolute; top: 16px; left: 16px; width: 18px; height: 18px; border: 2px solid #ff003b; transform: rotate(45deg);"></div>
+                    <div style="position: absolute; top: 16px; right: 16px; width: 18px; height: 18px; border: 2px solid #ff6200; transform: rotate(45deg);"></div>
+                  </div>
+                  <span>ROG Mecha HUD</span>
+                </div>
+
+                <!-- Theme 7: Matrix Digital Rain -->
+                <div class="theme-card" data-theme="matrix_code_rain" id="theme-matrix">
+                  <div class="theme-preview-box" style="background: #020d06; border-color: #00ff66;">
+                    <div style="position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font-family: monospace; font-size: 11px; color: #00ff66; letter-spacing: 1px;">0101_ROOT</div>
+                  </div>
+                  <span>Matrix Rain</span>
+                </div>
+
+                <!-- Theme 8: Pip-Boy Vault -->
+                <div class="theme-card" data-theme="pipboy_vault" id="theme-pipboy">
+                  <div class="theme-preview-box" style="background: #031206; border-color: #22c55e;">
+                    <div style="position: absolute; top: 10px; left: 8px; font-size: 8px; font-weight: bold; background: #22c55e; color: #031206; padding: 1px 4px;">STAT</div>
+                    <div style="position: absolute; bottom: 12px; left: 8px; right: 8px; height: 2px; background: #22c55e;"></div>
+                  </div>
+                  <span>Pip-Boy Vault</span>
+                </div>
+
+                <!-- Theme 9: Minimal Nordic -->
+                <div class="theme-card" data-theme="minimal_nordic" id="theme-nordic">
+                  <div class="theme-preview-box" style="background: #080a0f;">
+                    <div style="position: absolute; top: 18px; left: 18px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #00f0ff;"></div>
+                    <div style="position: absolute; top: 18px; right: 18px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #a855f7;"></div>
+                  </div>
+                  <span>Minimal Nordic</span>
+                </div>
+
+                <!-- Theme 10: NASA Mission Control -->
+                <div class="theme-card" data-theme="nasa_mission_control" id="theme-nasa">
+                  <div class="theme-preview-box" style="background: radial-gradient(circle, #0c4a6e 0%, #020617 100%); border-color: #38bdf8;">
+                    <div style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 26px; height: 26px; border-radius: 50%; border: 2px solid #38bdf8; background: linear-gradient(180deg, #0284c7 50%, #78350f 50%);"></div>
+                    <div style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-size: 7px; color: #f59e0b; font-weight: bold;">NASA DSN</div>
+                  </div>
+                  <span>NASA Mission</span>
+                </div>
+
+                <!-- Theme 11: Retro VT100 Terminal -->
+                <div class="theme-card" data-theme="retro_vt100_terminal" id="theme-vt100">
+                  <div class="theme-preview-box" style="background: #0c0700; border-color: #ffb000;">
+                    <div style="position: absolute; top: 10px; left: 8px; right: 8px; font-family: monospace; font-size: 8px; color: #ffb000; line-height: 1.3;">
+                      VAX/VMS 5.5<br>[▓▓▓░░] 64%<br>SYS_TICK █
+                    </div>
+                  </div>
+                  <span>VT100 Amber CRT</span>
+                </div>
+
+                <!-- Theme 12: Cyber Neo-Tokyo -->
+                <div class="theme-card" data-theme="cyber_neo_tokyo" id="theme-neotokyo">
+                  <div class="theme-preview-box" style="background: linear-gradient(135deg, #18051e, #060410); border-color: #ff007f;">
+                    <div style="position: absolute; top: 10px; left: 8px; font-size: 8px; font-weight: bold; color: #ff007f;">ネオ東京</div>
+                    <div style="position: absolute; bottom: 8px; right: 8px; font-size: 8px; font-weight: bold; color: #00f0ff; border: 1px solid #00f0ff; padding: 1px 3px;">[正常]</div>
+                  </div>
+                  <span>Neo-Tokyo Cyber</span>
+                </div>
+
+                <!-- Theme 13: Chibi Desk Pet -->
+                <div class="theme-card" data-theme="chibi_desk_pet" id="theme-chibi">
+                  <div class="theme-preview-box" style="background: linear-gradient(135deg, #241432, #0d0918); border-color: #f472b6;">
+                    <div style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; background: #fef08a; display: flex; align-items: center; justify-content: center; font-size: 8px;">(^‿^)</div>
+                    <div style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-size: 7px; color: #f472b6; font-weight: bold;">DESK PET ♡</div>
+                  </div>
+                  <span>Chibi Desk Pet</span>
+                </div>
+
+                <!-- Theme 14: Steampunk Chrono -->
+                <div class="theme-card" data-theme="steampunk_chrono" id="theme-steampunk">
+                  <div class="theme-preview-box" style="background: radial-gradient(circle, #241408 0%, #0c0703 100%); border-color: #b45309;">
+                    <div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-size: 18px; color: #fbbf24;">⚙</div>
+                    <div style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-size: 7px; color: #d97706; font-weight: bold;">PATENT 1892</div>
+                  </div>
+                  <span>Steampunk Chrono</span>
+                </div>
+
+                <!-- Theme 15: Pixel RPG Battle -->
+                <div class="theme-card" data-theme="pixel_rpg_status" id="theme-pixelrpg">
+                  <div class="theme-preview-box" style="background: linear-gradient(180deg, #0a2366, #020b22); border-color: #93c5fd;">
+                    <div style="position: absolute; top: 8px; left: 8px; font-family: monospace; font-size: 8px; color: #facc15;">⚔ HERO LV99</div>
+                    <div style="position: absolute; bottom: 10px; left: 8px; right: 8px; height: 4px; background: #22c55e; border: 1px solid #ffffff;"></div>
+                  </div>
+                  <span>16-Bit RPG Menu</span>
+                </div>
+
+                <!-- Theme 16: Custom Wallpaper / GIF -->
+                <div class="theme-card" data-theme="custom_wallpaper" id="theme-custom">
+                  <div class="theme-preview-box" style="background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 10px; color: #94a3b8;">🖼️ Custom Media</span>
+                  </div>
+                  <span>Custom Image/GIF</span>
                 </div>
               </div>
             </div>

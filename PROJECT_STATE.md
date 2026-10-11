@@ -3,7 +3,7 @@
 **Project Name:** CPU Dashboard AV Display (`cpu_dashboard_av_display`)  
 **Repository Root:** `/Users/gagansharma/Documents/GitHub/cpu_dashboard_av_display`  
 **Last Updated:** October 12, 2026  
-**Status:** ✅ Fully Implemented, Tested, and Verified  
+**Status:** ✅ Fully Implemented, Tested, and Verified (16 Curated Themes)  
 
 ---
 
@@ -12,14 +12,14 @@
 Transform a **4.3-inch analog LCD display with AV (Composite/CVBS) input** into a USB-connected **PC hardware monitoring dashboard** (CPU, GPU, RAM, VRAM, temperatures, network throughput, and digital clock) with animations and wallpapers—similar to **AIO water cooler pump displays (NZXT Kraken / Corsair Elite LCD)** and **PC cabinet monitoring screens (Hyte Nexus / XuanFang / Turing Smart Screen)**.
 
 ### Target Specifications:
-- **Display Target:** 4.3" analog LCD with Yellow RCA / CVBS input (typically car rear-view or mini security monitor, 320x240 / 480x272 native, NTSC 60Hz / PAL 50Hz).
+- **Display Target:** 4.3" or 3.5" to 7" analog/USB LCD displays with Yellow RCA / CVBS or digital input (Supporting **480p Standard 640×480**, **480p NTSC D1 720×480**, **480p WVGA 800×480**, **480p FWVGA 854×480**, and **240p QVGA 320×240**).
 - **Video Generator:** ESP32 Development Board (ESP32-WROOM-32) utilizing hardware DAC on **GPIO 25**.
 - **Host PC OS:** Windows (with cross-platform macOS/Linux support for the hybrid app).
-- **Display Aesthetics:** Cyberpunk / Sci-Fi HUD with dynamic gauges, spinning radar sweep, pulsing reactor core, and multiple customizable themes.
+- **Display Aesthetics:** 16 rich, curated templates spanning Cyberpunk, AIO liquid cooler rings, Supercar instrument clusters, Retro amber CRTs, Spaceflight telemetry, and Pixel art.
 - **Companion Software:** 
-  1. **Hybrid Desktop App (`desktop_app/`):** Electron + Vite web app with virtual 4.3" bezel preview, 5 theme presets, custom wallpaper/GIF upload, and direct Web Serial USB streaming.
+  1. **Hybrid Desktop App (`desktop_app/`):** Electron + Vite web app with virtual bezel preview, **dynamic 480p and 240p resolution presets**, scaling modes (Stretch vs. Aspect Fit), 16 theme presets, custom wallpaper/GIF upload, keyboard theme cycling (Left/Right Arrow or `[`/`]`), and direct Web Serial USB streaming.
   2. **Windows Background Agent (`windows_agent/`):** Python CLI daemon streaming real-time hardware metrics.
-  3. **Desktop Preview Simulator (`simulator/`):** Zero-dependency Tkinter app to preview HUD animations immediately.
+  3. **Desktop Preview Simulator (`simulator/`):** Zero-dependency Tkinter app supporting real-time resolution switching (480p, WVGA, 240p).
 
 ---
 
@@ -31,8 +31,9 @@ Transform a **4.3-inch analog LCD display with AV (Composite/CVBS) input** into 
 │                                                        │
 │  [Option 1: AERO·SYNC Studio]                          │
 │   - Electron / Chrome Hybrid App                       │
-│   - Live 4.3" Bezel Preview with 5 Themes             │
+│   - Live 4.3" Bezel Preview with 16 Themes             │
 │   - Web Serial API (navigator.serial)                  │
+│   - Keyboard Cycling (Arrow Left/Right, [ / ])         │
 │                                                        │
 │  [Option 2: Windows Background Agent]                  │
 │   - Python: psutil, pynvml, WMI                        │
@@ -63,7 +64,30 @@ Transform a **4.3-inch analog LCD display with AV (Composite/CVBS) input** into 
 
 ---
 
-## 3. Repository Directory Structure
+## 3. 16 Curated Display Templates
+
+Inspired by the 3.5" Smart USB System Monitor (YouTube: [cII_G00hFUk](https://www.youtube.com/watch?v=cII_G00hFUk&t=21s)), AIDA64 SensorPanels, and AIO cooler screens, `desktop_app/src/scripts/themes.js` includes **16 distinct 320x240 themes**:
+
+1. **CYBERPUNK_HUD:** Vector arc gauges, rotating radar sweep, pulsing reactor, tech corner brackets.
+2. **KRAKEN_AIO:** NZXT Kraken style dual circular RGB temperature rings with glowing center stats.
+3. **SYNTHWAVE_GRID:** 80s outrun wireframe perspective terrain grid, glowing sunset, horizon wireframe.
+4. **REACTOR_CORE:** Iron Man / Stark Arc reactor rotating containment rings & core overload glow.
+5. **AUTOMOTIVE_SUPERCAR:** Dual tachometer/speedometer, redline rev counter, digital gear indicator `[S 7]`, warning lamps.
+6. **MECHA_GAMING_ROG:** Asus ROG / Gundam mecha armor plates with angular diamond gauges & aggressive gaming cuts.
+7. **MATRIX_CODE_RAIN:** 32 columns of animated falling green digital code rain with terminal overlay.
+8. **PIPBOY_VAULT:** Fallout Pip-Boy 3000 CRT green phosphor terminal with animated scrolling ECG heart rate pulse line.
+9. **MINIMAL_NORDIC:** Scandinavian minimalist dark studio with ultra-thin micro-rings & elegant typography.
+10. **NASA_MISSION_CONTROL:** Apollo FDAI artificial horizon navball gimbal, starry space background, orbital flight telemetry, cryogenic oxygen bus.
+11. **RETRO_VT100_TERMINAL:** 1980s DEC VAX/VMS amber phosphor CRT console with ASCII block bar meters and blinking amber cursor `█`.
+12. **CYBER_NEO_TOKYO:** Japanese Akira arcade HUD with kanji headers (`中央演算`, `画像処理`, `主記憶`), cyber city silhouette, and dynamic warning stamp (`[正常]`, `[警告]`, `[臨界]`).
+13. **CHIBI_DESK_PET:** Animated pixel desk pet companion that sleeps when idle (`( ˘ω˘ ) Zzz`), smiles when active, sweats under load, and panics/catches fire if overheated (`(ノಠ益ಠ)ノ TOO HOT`).
+14. **STEAMPUNK_CHRONO:** Victorian brass boiler pressure dials, sepia parchment dials, and rotating mechanical brass cogwheels.
+15. **PIXEL_RPG_STATUS:** 16-bit JRPG battle status screen with HP/MP/EXP bevel bars, party leader `[HERO PC LV.99]`, and blinking command prompt.
+16. **CUSTOM_WALLPAPER:** Drag-and-drop custom image or animated GIF background with frosted-glass stat pill overlays.
+
+---
+
+## 4. Repository Directory Structure
 
 ```
 cpu_dashboard_av_display/
@@ -91,7 +115,7 @@ cpu_dashboard_av_display/
 │   ├── README.md                  # Studio user guide & feature breakdown
 │   ├── run_studio.bat             # One-click Windows runner
 │   ├── run_studio.sh              # One-click macOS / Linux runner
-│   ├── index.html                 # Main UI layout (Bezel Stage, Theme Drawer, Telemetry Hub)
+│   ├── index.html                 # Main UI layout (Bezel Stage, 16 Themes Drawer, Telemetry Hub)
 │   ├── electron/
 │   │   ├── main.js                # Electron main process (IPC telemetry, popout window)
 │   │   └── preload.js             # Secure IPC bridge
@@ -102,9 +126,9 @@ cpu_dashboard_av_display/
 │       │   ├── studio.css         # Theme grid, swatches, wallpaper dropzone, settings
 │       │   └── telemetry.css      # Hardware sensor cards & simulation sliders
 │       └── scripts/
-│           ├── app.js             # Application coordinator & tab navigation
-│           ├── renderer.js        # 60 FPS master canvas render loop with value damping
-│           ├── themes.js          # 5 canvas themes (Cyberpunk, AIO, Synthwave, Reactor, Wallpaper)
+│           ├── app.js             # Application coordinator & tab navigation + keyboard cycling
+│           ├── renderer.js        # 60 FPS master canvas render loop with 1-decimal-place clamping
+│           ├── themes.js          # 16 canvas themes matching Turing screens & AIO coolers
 │           ├── telemetry.js       # Live OS metrics (Electron IPC) + procedural simulation
 │           └── usb-streamer.js    # Web Serial API driver for direct ESP32 USB streaming
 │
@@ -121,7 +145,7 @@ cpu_dashboard_av_display/
 
 ---
 
-## 4. Hardware Wiring & Pinout Details
+## 5. Hardware Wiring & Pinout Details
 
 ### Components:
 1. **ESP32 Dev Board:** Standard dual-core **ESP32-WROOM-32** (or NodeMCU-32S).
@@ -137,7 +161,7 @@ cpu_dashboard_av_display/
 
 ---
 
-## 5. Serial Communication Protocol
+## 6. Serial Communication Protocol
 
 ### Connection Parameters:
 - **Baud Rate:** `115200` baud (default) or `921600` baud (high speed)
@@ -158,9 +182,9 @@ Single-line JSON string terminated by `\n`:
 | Key | Type | Description |
 | :--- | :--- | :--- |
 | `cpu` | float | CPU Usage Percentage (0.0 - 100.0) |
-| `cpu_t` | float | CPU Package Temperature in °C |
+| `cpu_t` | float | CPU Package Temperature in °C (clamped to 1 decimal place) |
 | `gpu` | float | GPU Core Usage Percentage (0.0 - 100.0) |
-| `gpu_t` | float | GPU Temperature in °C |
+| `gpu_t` | float | GPU Temperature in °C (clamped to 1 decimal place) |
 | `ram` | float | RAM Usage Percentage (0.0 - 100.0) |
 | `ram_u` | float | RAM Used in GB |
 | `ram_t` | float | RAM Total Capacity in GB |
@@ -174,23 +198,24 @@ If no serial packet is received within `3500ms` (e.g. PC booted off or disconnec
 
 ---
 
-## 6. How to Run Each Component
+## 7. How to Run Each Component
 
-### A. ESP32 Firmware
-```bash
-cd firmware
-pio run -t upload
-```
-*(Or open `firmware/src/main.cpp` in Arduino IDE with `LovyanGFX` and `ArduinoJson` libraries installed).*
-
-### B. AERO·SYNC Pro Studio (Hybrid App)
+### A. AERO·SYNC Pro Studio (Hybrid App)
 ```bash
 cd desktop_app
 npm run dev        # Web Studio on http://localhost:5173
 npm run electron   # Native Desktop Window
 ```
+- **Keyboard shortcuts:** Press `[` / `]` or Left / Right Arrow keys to cycle through all 16 presets!
 - **Windows:** Double-click `desktop_app/run_studio.bat`.
 - **macOS / Linux:** Execute `./desktop_app/run_studio.sh`.
+
+### B. ESP32 Firmware
+```bash
+cd firmware
+pio run -t upload
+```
+*(Or open `firmware/src/main.cpp` in Arduino IDE with `LovyanGFX` and `ArduinoJson` libraries installed).*
 
 ### C. Windows CLI Background Agent
 ```bash
@@ -206,25 +231,11 @@ python3 simulator/preview_simulator.py
 
 ---
 
-## 7. Verified Working Status
+## 8. Verified Working Status
 
 - [x] **Firmware:** FreeRTOS dual-core split, LovyanGFX sprite buffer (320x240, 8-bit depth), zero-flicker DMA output on GPIO 25 DAC.
 - [x] **Serial Parser:** Robust line-buffered JSON parsing with `ArduinoJson v7`, handshake responder, and auto-demo fallback.
-- [x] **Desktop App:** Built with Vite (`npm run build` passes with zero errors), Electron IPC bridge, 5 complete themes rendered on HTML5 Canvas, and Web Serial API USB streaming.
+- [x] **Desktop App:** Built with Vite (`npm run build` passes with 0 errors), 16 complete themes rendered on HTML5 Canvas, Web Serial API USB streaming, and decimal rounding fixed to 1 decimal place (`XX.X°C`).
 - [x] **Windows Agent:** Telemetry collector with `psutil`, `pynvml` (NVIDIA), and `WMI` (thermals), with automatic COM port discovery.
 - [x] **Desktop Simulator:** Tkinter preview app with auto-simulation, manual sliders, and overheat trigger verified working.
 - [x] **Git Tracking:** Clean `.gitignore` ignoring `.pio`, `venv`, `node_modules`, and caches.
-
----
-
-## 8. Immediate Next Steps / Roadmap for Future AI or Developer
-
-If continuing development or adding new features:
-1. **Packaging Executables:**
-   - Run `npx electron-builder` inside `desktop_app/` to generate standalone `.exe` installers for Windows and `.dmg` for macOS.
-2. **Audio Reactive Visualizer:**
-   - Add Web Audio API input in `desktop_app/` to stream live PC audio frequency bands into the bottom tray oscilloscope.
-3. **ESP32 Color Mode (Optional):**
-   - If NTSC color burst is desired over monochrome luminance on the ESP32, examine `ESP_8_BIT_composite` or `marciot/ESP32CompositeColorVideo` libraries which modulate 3.58MHz color bursts using the ESP32 Audio PLL.
-4. **Additional Theme Presets:**
-   - Add new themes in `desktop_app/src/scripts/themes.js` by defining new render functions and registering them in the `THEMES` dictionary.

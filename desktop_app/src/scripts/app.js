@@ -101,6 +101,22 @@ class AppController {
       });
     }
 
+    // Resolution Selector
+    const resSelect = document.getElementById('select-resolution');
+    if (resSelect) {
+      resSelect.addEventListener('change', (e) => {
+        this.renderer.setResolution(e.target.value);
+      });
+    }
+
+    // Scaling Mode Selector
+    const scalingSelect = document.getElementById('select-scaling');
+    if (scalingSelect) {
+      scalingSelect.addEventListener('change', (e) => {
+        this.renderer.setScalingMode(e.target.value);
+      });
+    }
+
     // Scanlines toggle
     const scanlineToggle = document.getElementById('toggle-scanlines');
     const scanlineOverlay = document.querySelector('.scanlines-overlay');
@@ -109,6 +125,25 @@ class AppController {
         scanlineOverlay.style.display = e.target.checked ? 'block' : 'none';
       });
     }
+
+    // Keyboard navigation to cycle themes with Arrow Left/Right or [ / ]
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ']' || e.key === 'n') {
+        this.cycleTheme(1);
+      } else if (e.key === 'ArrowLeft' || e.key === '[' || e.key === 'p') {
+        this.cycleTheme(-1);
+      }
+    });
+  }
+
+  cycleTheme(direction = 1) {
+    const cards = Array.from(document.querySelectorAll('.theme-card'));
+    if (!cards.length) return;
+    const currentIndex = cards.findIndex(c => c.classList.contains('active'));
+    const nextIndex = (currentIndex + direction + cards.length) % cards.length;
+    cards[nextIndex].click();
+    cards[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   loadWallpaperFile(file) {
