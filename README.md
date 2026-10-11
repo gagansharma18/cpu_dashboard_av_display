@@ -23,11 +23,11 @@ Powered by a single **ESP32 microcontroller**, this project generates standard a
   - If disconnected from the PC, the firmware automatically engages an animated **Standby / Sci-Fi Demo Mode** with simulated telemetry and radar sweeps!
 - **Zero-Flicker Double Buffering**:
   - Powered by [LovyanGFX](https://github.com/lovyan03/LovyanGFX), rendering to an offscreen sprite buffer before DMA composite transfer.
-- **Turnkey Windows Agent**:
-  - Auto-discovers the ESP32 COM port and streams CPU, GPU (NVIDIA / AMD / Intel), RAM, and network metrics via lightweight JSON packets.
-  - One-click launcher (`run_agent.bat`) with auto virtual environment and dependency setup.
+- **Turnkey Windows Agent & Hybrid Desktop Studio**:
+  - **AERO·SYNC Studio** (`desktop_app/`): Cross-platform hybrid app (Electron + Web) providing an AIO Cooler & Cabinet display studio just like **NZXT CAM / Corsair iCUE**, with live virtual bezel preview, 5 preset themes, custom wallpaper/GIF upload, and direct Web Serial USB streaming!
+  - **Windows Agent** (`windows_agent/`): Background Python service for Windows that streams CPU, GPU (NVIDIA / AMD / Intel), RAM, and network metrics via lightweight JSON packets.
 - **Desktop Preview Simulator**:
-  - Interactive Python/Tkinter preview tool (`preview_simulator.py`) to test the animations and gauge behaviors on your PC with zero external dependencies!
+  - Interactive Python/Tkinter preview tool (`simulator/preview_simulator.py`) to test the animations and gauge behaviors on your PC with zero external dependencies!
 
 ---
 
@@ -108,16 +108,24 @@ pio run -t upload
 
 ---
 
-### 2. Run the Windows Telemetry Agent
+---
 
-1. Plug the flashed ESP32 into a USB port on your Windows PC.
-2. Navigate to the `windows_agent` folder:
-3. Double-click **`run_agent.bat`**.
+### 2. Choose Your PC Host Software
 
-The batch script automatically:
-- Creates a Python virtual environment.
-- Installs `psutil`, `pyserial`, and `pynvml`.
-- Auto-detects the ESP32 COM port and initiates streaming!
+You have two powerful options to drive your 4.3" AV display:
+
+#### Option A: AERO·SYNC Pro Studio (Hybrid Desktop App — Recommended)
+A complete AIO Cooler & Cabinet Display suite inspired by **NZXT CAM** and **Corsair iCUE**:
+- **On Windows**: Double-click [`desktop_app/run_studio.bat`](file:///Users/gagansharma/Documents/GitHub/cpu_dashboard_av_display/desktop_app/run_studio.bat)
+- **On macOS / Linux**: Run `./desktop_app/run_studio.sh` or `npm run dev` in `desktop_app/`
+- **Native Electron App**: Run `npm run electron` in `desktop_app/`
+- Includes live virtual 4.3" bezel preview, 5 preset themes, custom image/GIF wallpaper upload, and direct Web Serial USB streaming!
+
+#### Option B: Lightweight Windows Background Agent
+If you prefer a silent background CLI script that runs unobtrusively on Windows:
+1. Navigate to the `windows_agent` folder.
+2. Double-click [`windows_agent/run_agent.bat`](file:///Users/gagansharma/Documents/GitHub/cpu_dashboard_av_display/windows_agent/run_agent.bat).
+3. The script automatically sets up a Python virtual environment and streams hardware stats to the ESP32.
 
 ---
 

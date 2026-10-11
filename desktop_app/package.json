@@ -1,0 +1,31 @@
+{
+  "name": "cyber-aio-display-studio",
+  "version": "1.0.0",
+  "description": "Cross-platform AIO Cooler & Cabinet Display Studio for 4.3\" AV and USB LCDs",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron": "electron electron/main.js",
+    "app": "vite --host & sleep 1 && electron electron/main.js"
+  },
+  "keywords": [
+    "aio-cooler",
+    "cabinet-display",
+    "pc-dashboard",
+    "esp32",
+    "composite-video",
+    "hardware-monitor"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "vite": "^6.0.7"
+  },
+  "dependencies": {
+    "systeminformation": "^5.23.5"
+  }
+}

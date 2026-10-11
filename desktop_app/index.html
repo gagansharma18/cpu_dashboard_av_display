@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AERO·SYNC // AIO & PC Cabinet Display Studio</title>
+  <link rel="stylesheet" href="./src/styles/main.css">
+  <link rel="stylesheet" href="./src/styles/cabinet-bezel.css">
+  <link rel="stylesheet" href="./src/styles/studio.css">
+  <link rel="stylesheet" href="./src/styles/telemetry.css">
+</head>
+<body>
+  <div id="app-container">
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-icon">
+          <span>⚡</span>
+        </div>
+        <div class="brand-text">
+          <h1>AERO·SYNC <span class="badge">PRO STUDIO</span></h1>
+          <p>4.3" AV & USB Cabinet Display Companion</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Hardware Connection Status -->
+        <div id="usb-status-badge" class="status-badge">
+          <div class="dot"></div>
+          <span class="status-text">USB: STANDBY</span>
+        </div>
+
+        <!-- Connect to Physical USB Screen -->
+        <button id="btn-connect-usb" class="btn btn-primary" title="Connect to ESP32 via USB Serial">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          Connect USB Display
+        </button>
+
+        <button id="btn-disconnect-usb" class="btn btn-secondary" style="display: none;">
+          Disconnect
+        </button>
+
+        <!-- Pop-Out Mini View / Desktop Widget -->
+        <button id="btn-popout-window" class="btn btn-secondary" title="Pop-out floating mini display widget">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+          </svg>
+          Pop-Out Widget
+        </button>
+
+        <!-- Fullscreen Mode -->
+        <button id="btn-fullscreen-preview" class="btn btn-secondary" title="Fullscreen Preview Mode">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- App Body (Sidebar + Content + Studio Drawer) -->
+    <div class="app-body">
+      <!-- Sidebar Navigation -->
+      <nav class="app-sidebar">
+        <div class="nav-item active" data-view="studio" id="nav-studio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>Display Studio</span>
+        </div>
+
+        <div class="nav-item" data-view="telemetry" id="nav-telemetry">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+          </svg>
+          <span>Telemetry Hub</span>
+        </div>
+
+        <div class="nav-item" data-view="hardware" id="nav-hardware">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+            <rect x="9" y="9" width="6" height="6"></rect>
+            <line x1="9" y1="1" x2="9" y2="4"></line>
+            <line x1="15" y1="1" x2="15" y2="4"></line>
+            <line x1="9" y1="20" x2="9" y2="23"></line>
+            <line x1="15" y1="20" x2="15" y2="23"></line>
+          </svg>
+          <span>Hardware & USB</span>
+        </div>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="sidebar-footer">
+          <div>ESP32 AV 4.3"</div>
+          <div>320x240 @ 60 FPS</div>
+        </div>
+      </nav>
+
+      <!-- Main Viewport Area -->
+      <main class="main-viewport">
+        <!-- 1. Display Studio View Pane -->
+        <div id="pane-studio" class="view-pane active">
+          <!-- Center Stage with Virtual Bezel Frame -->
+          <div class="display-stage">
+            <div class="bezel-chassis">
+              <!-- Corner Screws -->
+              <div class="screw tl"></div>
+              <div class="screw tr"></div>
+              <div class="screw bl"></div>
+              <div class="screw br"></div>
+
+              <!-- Top Hardware LED -->
+              <div class="hardware-led">
+                <div class="led-dot"></div>
+                <span>4.3" CVBS DISP</span>
+              </div>
+
+              <!-- Recessed LCD Housing -->
+              <div class="screen-housing">
+                <canvas id="lcd-canvas"></canvas>
+                <div class="screen-glare"></div>
+                <div class="scanlines-overlay"></div>
+              </div>
+            </div>
+
+            <!-- Stage Control Toolbar -->
+            <div class="stage-controls">
+              <span class="control-pill active">320 x 240 NTSC</span>
+              <span class="control-pill">60 FPS DMA</span>
+              <label class="control-pill" style="cursor: pointer;">
+                <input type="checkbox" id="toggle-scanlines" checked style="margin-right: 4px;">
+                CRT Scanlines
+              </label>
+            </div>
+          </div>
+
+          <!-- Right Studio Customization Drawer -->
+          <aside class="studio-drawer">
+            <!-- Theme Presets -->
+            <div class="studio-section">
+              <div class="section-title">
+                <span>Display Themes</span>
+                <span style="font-size: 10px; color: var(--theme-color);">5 PRESETS</span>
+              </div>
+
+              <div class="theme-grid">
+                <!-- Theme 1: Cyberpunk HUD -->
+                <div class="theme-card active" data-theme="cyberpunk_hud" id="theme-cyberpunk">
+                  <div class="theme-preview-box" style="background: radial-gradient(circle, #0c263d 0%, #050b14 100%); border-color: #00f0ff;">
+                    <div style="position: absolute; top: 12px; left: 16px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #00f0ff;"></div>
+                    <div style="position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #00f0ff;"></div>
+                  </div>
+                  <span>Cyberpunk HUD</span>
+                </div>
+
+                <!-- Theme 2: Kraken AIO Dual Ring -->
+                <div class="theme-card" data-theme="kraken_aio" id="theme-kraken">
+                  <div class="theme-preview-box" style="background: #020617;">
+                    <div style="position: absolute; top: 14px; left: 18px; width: 26px; height: 26px; border-radius: 50%; border: 3px solid #00f0ff;"></div>
+                    <div style="position: absolute; top: 14px; right: 18px; width: 26px; height: 26px; border-radius: 50%; border: 3px solid #a855f7;"></div>
+                  </div>
+                  <span>Kraken AIO Ring</span>
+                </div>
+
+                <!-- Theme 3: Synthwave Grid -->
+                <div class="theme-card" data-theme="synthwave_grid" id="theme-synthwave">
+                  <div class="theme-preview-box" style="background: linear-gradient(180deg, #3b0764 0%, #0f051d 100%);">
+                    <div style="position: absolute; bottom: 0; width: 100%; height: 18px; border-top: 1px solid #f43f5e;"></div>
+                  </div>
+                  <span>Synthwave Outrun</span>
+                </div>
+
+                <!-- Theme 4: Sci-Fi Arc Reactor -->
+                <div class="theme-card" data-theme="reactor_core" id="theme-reactor">
+                  <div class="theme-preview-box" style="background: #030712;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 34px; height: 34px; border-radius: 50%; border: 2px dashed #00f0ff;"></div>
+                  </div>
+                  <span>Arc Reactor</span>
+                </div>
+
+                <!-- Theme 5: Custom Wallpaper / GIF -->
+                <div class="theme-card" data-theme="custom_wallpaper" id="theme-custom" style="grid-column: span 2;">
+                  <div class="theme-preview-box" style="background: linear-gradient(135deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 11px; color: #94a3b8;">🖼️ Custom Media Overlay</span>
+                  </div>
+                  <span>Custom Wallpaper / GIF</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accent Color Swatches -->
+            <div class="studio-section">
+              <div class="section-title">
+                <span>Neon Color Accent</span>
+              </div>
+              <div class="color-swatches">
+                <div class="swatch active" data-color="#00f0ff" style="background-color: #00f0ff;" title="Cyan"></div>
+                <div class="swatch" data-color="#ff0055" style="background-color: #ff0055;" title="Neon Magenta"></div>
+                <div class="swatch" data-color="#a855f7" style="background-color: #a855f7;" title="Electric Purple"></div>
+                <div class="swatch" data-color="#ffb700" style="background-color: #ffb700;" title="Amber Gold"></div>
+                <div class="swatch" data-color="#10b981" style="background-color: #10b981;" title="Acid Green"></div>
+                <div class="swatch" data-color="#ffffff" style="background-color: #ffffff;" title="Crisp White"></div>
+              </div>
+            </div>
+
+            <!-- Custom Wallpaper Upload Dropzone -->
+            <div class="studio-section">
+              <div class="section-title">
+                <span>Upload Custom Media</span>
+              </div>
+              <div id="wallpaper-dropzone" class="upload-dropzone">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <p>Click or drag image / animated GIF</p>
+                <span>PNG, JPG, WebP, GIF (320x240 recommended)</span>
+                <input type="file" id="wallpaper-input" accept="image/*" style="display: none;">
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- 2. Telemetry Hub View Pane -->
+        <div id="pane-telemetry" class="view-pane">
+          <div class="telemetry-view">
+            <div class="telemetry-header">
+              <h2>Hardware Telemetry Stream</h2>
+              <p style="color: var(--text-secondary); font-size: 13px;">Real-time metrics polled from operating system</p>
+            </div>
+
+            <!-- Metric Cards Grid -->
+            <div class="telemetry-cards-grid">
+              <!-- CPU Card -->
+              <div id="card-cpu" class="telemetry-card">
+                <div class="card-top">
+                  <span class="sensor-name">CPU Processor</span>
+                  <span class="sensor-tag">ACTIVE</span>
+                </div>
+                <div class="card-value-row">
+                  <span class="big-value">45%</span>
+                  <span class="temp-badge">58°C</span>
+                </div>
+                <div class="sensor-bar-bg">
+                  <div class="sensor-bar-fill" style="width: 45%;"></div>
+                </div>
+                <div class="sensor-details">
+                  <span>LOAD CURVE</span>
+                  <span class="subdetail">4.20 GHz NOMINAL</span>
+                </div>
+              </div>
+
+              <!-- GPU Card -->
+              <div id="card-gpu" class="telemetry-card">
+                <div class="card-top">
+                  <span class="sensor-name">GPU Graphics</span>
+                  <span class="sensor-tag">ACTIVE</span>
+                </div>
+                <div class="card-value-row">
+                  <span class="big-value">68%</span>
+                  <span class="temp-badge">64°C</span>
+                </div>
+                <div class="sensor-bar-bg">
+                  <div class="sensor-bar-fill" style="width: 68%;"></div>
+                </div>
+                <div class="sensor-details">
+                  <span>MEMORY LOAD</span>
+                  <span class="subdetail">VRAM 54%</span>
+                </div>
+              </div>
+
+              <!-- RAM Card -->
+              <div id="card-ram" class="telemetry-card">
+                <div class="card-top">
+                  <span class="sensor-name">System RAM</span>
+                  <span class="sensor-tag">MEMORY</span>
+                </div>
+                <div class="card-value-row">
+                  <span class="big-value">62%</span>
+                </div>
+                <div class="sensor-bar-bg">
+                  <div class="sensor-bar-fill" style="width: 62%;"></div>
+                </div>
+                <div class="sensor-details">
+                  <span>CAPACITY</span>
+                  <span class="subdetail">9.9 / 16.0 GB</span>
+                </div>
+              </div>
+
+              <!-- Network Card -->
+              <div id="card-net" class="telemetry-card">
+                <div class="card-top">
+                  <span class="sensor-name">Network I/O</span>
+                  <span class="sensor-tag">ETHERNET</span>
+                </div>
+                <div class="card-value-row">
+                  <span class="big-value" style="font-size: 28px;">14.2 MB/s</span>
+                </div>
+                <div class="sensor-bar-bg">
+                  <div class="sensor-bar-fill" style="width: 40%;"></div>
+                </div>
+                <div class="sensor-details">
+                  <span>THROUGHPUT</span>
+                  <span class="subdetail">▲ 2.4 MB/s</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Manual Simulation Controls -->
+            <div class="sim-controls-card">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Interactive Simulation Mode</h3>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); cursor: pointer;">
+                  <input type="checkbox" id="sim-auto-toggle" checked>
+                  Auto Fluctuations (Playing)
+                </label>
+              </div>
+
+              <div class="slider-group">
+                <div class="slider-item">
+                  <label>
+                    <span>CPU Core Load:</span>
+                    <strong id="sim-cpu-val" style="color: var(--theme-color);">45%</strong>
+                  </label>
+                  <input type="range" id="sim-cpu" class="range-input" min="0" max="100" value="45">
+                </div>
+
+                <div class="slider-item">
+                  <label>
+                    <span>GPU Engine Load:</span>
+                    <strong id="sim-gpu-val" style="color: var(--accent-purple);">68%</strong>
+                  </label>
+                  <input type="range" id="sim-gpu" class="range-input" min="0" max="100" value="68">
+                </div>
+
+                <div class="slider-item">
+                  <label>
+                    <span>RAM Capacity:</span>
+                    <strong id="sim-ram-val" style="color: var(--accent-blue);">62%</strong>
+                  </label>
+                  <input type="range" id="sim-ram" class="range-input" min="0" max="100" value="62">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Hardware & USB View Pane -->
+        <div id="pane-hardware" class="view-pane">
+          <div class="telemetry-view">
+            <h2>Hardware USB Transmitter</h2>
+            <p style="color: var(--text-secondary); font-size: 13px;">Direct USB connection to ESP32 DAC display receiver</p>
+
+            <div class="sim-controls-card">
+              <div class="setting-row">
+                <span class="setting-label">Serial Baud Rate:</span>
+                <select id="baud-rate-select" style="background: #020408; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 6px 12px;">
+                  <option value="115200" selected>115,200 baud (Standard)</option>
+                  <option value="921600">921,600 baud (High Speed)</option>
+                </select>
+              </div>
+
+              <div class="setting-row">
+                <span class="setting-label">Protocol:</span>
+                <span style="font-family: var(--font-mono); color: var(--theme-color);">JSON Streaming (1Hz)</span>
+              </div>
+
+              <div class="serial-stats-grid">
+                <div class="stat-chip">
+                  <span class="label">Hardware Port</span>
+                  <span class="value" id="stat-port">Auto / WebSerial</span>
+                </div>
+                <div class="stat-chip">
+                  <span class="label">Video Standard</span>
+                  <span class="value">NTSC 60Hz</span>
+                </div>
+              </div>
+
+              <div class="studio-section" style="margin-top: 10px;">
+                <span class="section-title">Serial Stream Output Log:</span>
+                <div id="serial-log-console" class="serial-console">[SYSTEM] Ready. Click 'Connect USB Display' to select ESP32 port.
+[SYSTEM] Web Serial API status: Available
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="./src/scripts/app.js"></script>
+</body>
+</html>

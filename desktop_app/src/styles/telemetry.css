@@ -1,0 +1,162 @@
+/* Telemetry Hub & Hardware Monitor Styles */
+
+.telemetry-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.telemetry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.telemetry-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.telemetry-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.telemetry-card:hover {
+  border-color: rgba(0, 240, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.telemetry-card .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.telemetry-card .sensor-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.telemetry-card .sensor-tag {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.telemetry-card .card-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.telemetry-card .big-value {
+  font-size: 38px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #ffffff;
+  line-height: 1;
+}
+
+.telemetry-card .unit {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.telemetry-card .temp-badge {
+  margin-left: auto;
+  font-size: 14px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.telemetry-card .temp-badge.hot {
+  color: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+/* Progress Bar */
+.sensor-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sensor-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--theme-color), #3b82f6);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--theme-glow);
+}
+
+.sensor-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+/* Simulator Controls Panel */
+.sim-controls-card {
+  background: rgba(14, 21, 37, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.slider-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.slider-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slider-item label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+}
+
+.range-input {
+  width: 100%;
+  accent-color: var(--theme-color);
+  cursor: pointer;
+}
